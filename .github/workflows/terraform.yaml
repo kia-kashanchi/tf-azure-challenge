@@ -1,0 +1,43 @@
+name: 'Terraform CI/CD'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.3.0'
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        working-directory: environments/dev
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: environments/dev
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: environments/dev
+        run: terraform plan -out=tfplan
+
+      # Uncomment the next step to auto-apply (ensure proper approvals in production)
+      #- name: Terraform Apply
+      #  if: github.ref == 'refs/heads/main'
+      #  working-directory: environments/dev
+      #  run: terraform apply -auto-approve tfplan
