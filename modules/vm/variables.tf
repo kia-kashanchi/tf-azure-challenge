@@ -26,13 +26,11 @@ variable "vm_name" {
 variable "vm_size" {
   description = "The size of the Virtual Machine"
   type        = string
-  default     = "Standard_B1s"
 }
 
 variable "os_disk_name" {
   description = "The name of the OS disk"
   type        = string
-  default     = "osdisk"
 }
 
 variable "admin_username" {
@@ -48,29 +46,24 @@ variable "admin_ssh_public_key" {
 variable "image_publisher" {
   description = "The image publisher"
   type        = string
-  default     = "Canonical"
 }
 
 variable "image_offer" {
   description = "The image offer"
   type        = string
-  default     = "UbuntuServer"
 }
 
 variable "image_sku" {
   description = "The image SKU"
   type        = string
-  default     = "22.04-LTS"
 }
 
 variable "image_version" {
   description = "The image version"
   type        = string
-  default     = "latest"
 }
 
 variable "tags" {
   description = "A map of tags to add to resources"
   type        = map(string)
-  default     = {}
 }

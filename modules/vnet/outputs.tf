@@ -1,9 +1,11 @@
 output "vnet_id" {
-  description = "The ID of the Virtual Network"
-  value       = azurerm_virtual_network.this.id
+  value = azurerm_virtual_network.vnet.id
 }
 
-output "subnet_id" {
-  description = "The ID of the default subnet"
-  value       = azurerm_subnet.default.id
+output "subnet_ids" {
+  value = { for k, v in azurerm_subnet.subnets : k => v.id }
+}
+
+output "nsg_ids" {
+  value = { for k, v in azurerm_network_security_group.nsg : k => v.id }
 }

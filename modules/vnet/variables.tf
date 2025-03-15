@@ -1,34 +1,49 @@
-variable "vnet_name" {
-  description = "The name of the Virtual Network"
+variable "resource_group_name" {
+  description = "Parent resource group name"
   type        = string
 }
 
 variable "location" {
-  description = "Azure Region"
+  description = "Azure region"
   type        = string
 }
 
-variable "resource_group_name" {
-  description = "Resource group name"
+variable "vnet_name" {
+  description = "Virtual Network name"
   type        = string
 }
 
 variable "address_space" {
-  description = "List of address spaces for the VNET"
+  description = "VNET address space"
   type        = list(string)
 }
 
-variable "subnet_name" {
-  description = "The name of the default subnet"
-  type        = string
+variable "subnets" {
+  description = "Subnet configuration with optional NSG rules"
+  type = map(object({
+    address_prefixes = list(string)
+    nsg_rules = optional(list(object({
+      name                       = string
+      priority                   = number
+      direction                  = string
+      access                     = string
+      protocol                   = string
+      source_port_range          = string
+      destination_port_range     = string
+      source_address_prefix      = string
+      destination_address_prefix = string
+    })))
+  }))
 }
 
-variable "subnet_prefixes" {
-  description = "Address prefixes for the subnet"
-  type        = list(string)
+variable "enable_nsg" {
+  description = "Enable NSG creation"
+  type        = bool
+  default     = true
 }
 
-variable "default_tags" {
-  description = "Default tags for resources"
+variable "tags" {
+  description = "Resource tags"
   type        = map(string)
+  default     = {}
 }
