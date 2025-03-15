@@ -1,0 +1,36 @@
+name: Terraform Deployment
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      
+      - name: Terraform Init
+        run: terraform init
+        working-directory: environments/prod
+      
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: environments/prod
+        env:
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Export SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          terraform output -raw ssh_key > ~/.ssh/prod_vm_key
+          chmod 600 ~/.ssh/prod_vm_key
+        working-directory: environments/prod
