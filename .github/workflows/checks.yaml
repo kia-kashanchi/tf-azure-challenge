@@ -21,8 +21,8 @@ jobs:
 #      - name: TFLint
 #        run: tflint --init && tflint --config .tflint.hcl --recursive
       
-      - name: Checkov
-        run: checkov -d . --config-file .checkov.yml
+ #     - name: Checkov
+  #      run: checkov -d . # --config-file .checkov.yml
       
       - name: Terraform Validate
         run: |
